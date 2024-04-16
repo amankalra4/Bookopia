@@ -1,0 +1,23 @@
+.bookCardContainer {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bookImage {
+  width: 150px;
+  height: auto;
+}
+
+.bookDetails {
+  padding: 10px;
+}
+
+.bookDetails h2 {
+  margin-top: 0;
+}
+
+.bookDetails p {
+  margin: 5px 0;
+}

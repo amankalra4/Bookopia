@@ -1,0 +1,47 @@
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.contentContainer {
+  flex-grow: 1;
+}
+
+.heroImageContainer {
+  text-align: center;
+  padding: 50px 0;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  justify-content: center;
+}
+
+.about {
+  padding: 50px 0;
+}
+
+.whatWeDoCards {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 30px;
+  justify-content: center;
+}
+
+.cardContainer {
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 2px 2px 4px 3px #9b9b9b;
+  width: 20%;
+  height: 180px;
+  margin: 0px 0px 10px;
+
+  h2 {
+    font-size: 16px;
+  }
+
+  span {
+    font-size: 14px;
+  }
+}
