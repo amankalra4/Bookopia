@@ -1,0 +1,69 @@
+/* style.css */
+
+/* Container for the two cards */
+/* .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  } */
+  
+  /* Card styles */
+  .card {
+    width: 45%; /* Adjust width as needed */
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .card h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  
+  /* Input field styles */
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    display: block;
+  }
+  
+  .input-group input[type="text"],
+  .input-group input[type="radio"] {
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin-top: 5px;
+  }
+  
+  /* Radio button styles */
+  .radio-group {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .radio-group input[type="radio"] {
+    margin-right: 10px;
+  }
+  
+  /* Button styles */
+  button.add-button {
+    padding: 10px 16px;
+    margin: 0;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  button.add-button:hover {
+    background-color: #0056b3;
+  }
+  

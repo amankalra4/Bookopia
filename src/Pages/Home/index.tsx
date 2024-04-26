@@ -3,6 +3,8 @@ import Footer from "../../ Components/Footer";
 import HomeScreenImage from "../../assets/home-screen-image.jpg";
 import "./styles.css";
 import { whatWeDoContent } from "./constants";
+import BookListing from "../BookListing.tsx";
+import BookExchange from "../BookExchange";
 
 function Home() {
   return (
@@ -26,6 +28,10 @@ function Home() {
             </div>
           ))}
         </div>
+        <BookListing onSelect={function (book: string): void {
+          throw new Error("Function not implemented.");
+        } } />
+        <BookExchange />
       </main>
       <Footer />
     </div>
