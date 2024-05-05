@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import customAxios from "../../utils/axios";
+import { ROUTES } from "../../utils/constants";
+import { setLocalStorageItem } from "../../utils";
 import "./styles.css";
 
 type FormData = {
@@ -12,6 +15,12 @@ type FormData = {
 
 type KeyValuePair = {
   [key: string]: string;
+};
+
+export type RegistrationResponse = {
+  message: string;
+  token: string;
+  success: boolean;
 };
 
 const Registration = () => {
@@ -45,8 +54,6 @@ const Registration = () => {
     }
     if (!formData.password) {
       errors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      errors.password = "Password must be at least 6 characters long";
     }
     if (!formData.confirmPassword) {
       errors.confirmPassword = "Confirm password is required";
@@ -56,12 +63,24 @@ const Registration = () => {
     return errors;
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const errors = validateForm();
     if (Object.keys(errors).length === 0) {
       try {
-        navigate("/login");
+        const { fullName, email, location, password } = formData;
+        const registrationResponse =
+          await customAxios.post<RegistrationResponse>("auth/register", {
+            name: fullName,
+            email: email,
+            location: location,
+            password: password,
+          });
+        const { token, success = false } = registrationResponse.data;
+        if (success) {
+          setLocalStorageItem("token", token);
+          navigate(ROUTES.HOME);
+        }
       } catch (err: any) {
         console.error(err.response.data);
       }
@@ -122,9 +141,8 @@ const Registration = () => {
         <button type="submit">Register</button>
       </form>
       <p className="login-text">
-        Already have an account? <a href="/login">Login here</a>
+        Already have an account? <a href={ROUTES.LOGIN}>Login here</a>
       </p>
-      <button className="google-login-button">Login with Google</button>
     </div>
   );
 };

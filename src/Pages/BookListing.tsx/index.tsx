@@ -1,98 +1,118 @@
-// BookListing.tsx
-import React, { ReactNode, useEffect, useState } from 'react';
-import {booksData} from './constants'; // Sample data for books
-import BookCard from './BookCard';
-import './style.css'; // Import CSS file for styling
+import { useState, useEffect } from "react";
+import customAxios from "../../utils/axios";
+import Skeleton from "@mui/material/Skeleton";
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import NoBooksBanner from "../../assets/no-book-banner.webp";
+import "./style.css";
+import AddBookModal from "../../Components/AddBookModal";
 
-// Function to check if the user is logged in (You need to replace this with your actual authentication logic)
-const isLoggedIn = () => {
-    // Implement your authentication logic here
-    // For example, you might use localStorage, cookies, or context API to manage authentication state
-    // Return true if the user is logged in, false otherwise
-    return localStorage.getItem('isLoggedIn') === 'true'; // Assuming you are storing login state in localStorage
-  }
-
-  
-  interface BookListingProps {
-    onSelect: (book: string) => void;
-  }
-  
-  
-
-
-interface Book {
+interface IBooksList {
   id: number;
   title: string;
   author: string;
+  condition: string;
   genre: string;
-  // Add more fields as needed
+  availability: boolean;
+  operationType: string;
+  provider: Provider;
 }
 
+interface Provider {
+  name: string | null;
+  email: string | null;
+}
 
-const genres = ['Fantasy', 'Science Fiction', 'Mystery', 'Thriller', 'Romance']; // Sample genres
+const BookListing = () => {
+  const [books, setBooks] = useState<IBooksList[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-const BookListing: React.FC <BookListingProps> =  ({ onSelect }) => {
-//     const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await customAxios.get<IBooksList[]>("books/book-list");
+        setBooks([...response.data, ...response.data, ...response.data]);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-//   useEffect(() => {
-//     // Check if the user is logged in when the component mounts
-//     setLoggedIn(isLoggedIn());
-//   }, []);
-  const [filter, setFilter] = useState<string | null>(null); // State for genre filter
-  const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
+    fetchData();
+  }, []);
 
-  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.target.value);
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
   };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
-  const filteredBooks = booksData.filter(book => {
-    // Filter by genre
-    if (filter && book.genre !== filter) return false;
-
-    // Filter by search term
-    if (searchTerm && !book.title.toLowerCase().includes(searchTerm.toLowerCase())) return false;
-
-    return true;
-  });
-
-    function book(value: { id: number; title: string; author: string; genre: string; }, index: number, array: { id: number; title: string; author: string; genre: string; }[]): ReactNode {
-        throw new Error('Function not implemented.');
-    }
-    // if (!loggedIn) {
-    //     return <p>Please log in to view this page.</p>;
-    //   }
-
-    
   return (
-    <div className="book-listing-container">
-      {/* Genre filter */}
-      <select value={filter || ''} onChange={handleFilterChange}>
-        <option value="">All Genres</option>
-        {genres.map(genre => (
-          <option key={genre} value={genre}>
-            {genre}
-          </option>
-        ))}
-      </select>
-
-      {/* Search input */}
-      <input type="text" placeholder="Search by title..." value={searchTerm} onChange={handleSearchChange} />
-
-      {/* Book list */}
-      <div className="book-list">
-        {filteredBooks.map(book => (
-          <BookCard key={book.id} book={book} />
-        ))}
-      </div>
+    <div className="bookListingContainer">
+      {loading ? (
+        <div className="loadingIndicator">
+          {Array.from({ length: 10 }, (_, index) => index + 1).map((index) => (
+            <div key={index} className="bookCard">
+              <Skeleton variant="rectangular" height={100} />
+              <Skeleton variant="text" />
+              <Skeleton variant="text" />
+            </div>
+          ))}
+        </div>
+      ) : books.length === 0 ? (
+        <div className="noBooksContainer">
+          <div className="noBooksContent">
+            <img
+              src={NoBooksBanner}
+              alt="No Books Banner"
+              style={{ borderRadius: "16px" }}
+            />
+            <div>
+              <p>No books available</p>
+              <button className="addABookButton" onClick={handleOpenModal}>
+                Add a Book
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div style={{ display: "flex", gap: 30 }}>
+          {books.map((book) => (
+            <Card key={book.id} className="bookCard">
+              <CardMedia
+                component="img"
+                height="140"
+                image={NoBooksBanner}
+                alt="No book"
+              />
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  Title: {book.title}
+                </Typography>
+                <Typography variant="body1" component="div">
+                  Author: {book.author}
+                </Typography>
+                <Typography variant="body1" component="div">
+                  Genre: {book.genre}
+                </Typography>
+                <Typography variant="body1" component="div">
+                  Availability:{" "}
+                  {book.availability ? "Available" : "Not Available"}
+                </Typography>
+                <Typography variant="body1" component="div">
+                  Operation Type: {book.operationType}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+      <AddBookModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 };
 
 export default BookListing;
-
-// Ensure to add an empty export statement to make it a module
-export {};
