@@ -13,8 +13,4 @@ export const whatWeDoContent = [
     content:
       "Take a look through our huge selection of available titles, then make a request for the ones that catch your eye. Our easy-to-use search criteria allow you to look for particular books or categories as well.",
   },
-  {
-    heading: "Exchange and Enjoy",
-    content: `Work with your fellow member to negotiate the exchange specifics when your request has been approved. Set out on your next reading journey with ease, whether you meet in person or send books to each other's doorstep.`,
-  },
 ];

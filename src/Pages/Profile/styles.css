@@ -1,0 +1,30 @@
+.tabsContainer {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  gap: 100px;
+  margin-top: 40px;
+  align-items: baseline;
+}
+
+.tabContentContainer {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.tabContent {
+  height: 100%;
+}
+
+.personalInfoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+}
+
+.booksOwnedContainer {
+  margin-top: 40px;
+  width: 60%;
+}

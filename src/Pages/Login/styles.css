@@ -36,3 +36,9 @@
 .registerLink a {
   color: #007bff;
 }
+
+.error {
+  color: #fa6464;
+  font-size: 14px;
+  margin-top: 5px;
+}
