@@ -6,7 +6,7 @@ import NoBooksBanner from "../../assets/no-book-banner.webp";
 import "./style.css";
 import AddBookModal from "../../Components/AddBookModal";
 
-interface IBooksList {
+export interface IBooksList {
   id: number;
   title: string;
   author: string;
@@ -17,7 +17,7 @@ interface IBooksList {
   provider: Provider;
 }
 
-interface Provider {
+export interface Provider {
   name: string | null;
   email: string | null;
 }
@@ -27,18 +27,18 @@ const BookListing = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await customAxios.get<IBooksList[]>("books/book-list");
-        setBooks([...response.data, ...response.data, ...response.data]);
-      } catch (error) {
-        console.error("Error fetching books:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await customAxios.get<IBooksList[]>("books/book-list");
+      setBooks([...response.data]);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -53,7 +53,15 @@ const BookListing = () => {
   return (
     <div className="bookListingContainer">
       {loading ? (
-        <div className="loadingIndicator">
+        <div
+          style={{
+            display: "flex",
+            gap: "30px",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            padding: "40px",
+          }}
+        >
           {Array.from({ length: 10 }, (_, index) => index + 1).map((index) => (
             <div key={index} className="bookCard">
               <Skeleton variant="rectangular" height={100} />
@@ -79,38 +87,60 @@ const BookListing = () => {
           </div>
         </div>
       ) : (
-        <div style={{ display: "flex", gap: 30 }}>
-          {books.map((book) => (
-            <Card key={book.id} className="bookCard">
-              <CardMedia
-                component="img"
-                height="140"
-                image={NoBooksBanner}
-                alt="No book"
-              />
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  Title: {book.title}
-                </Typography>
-                <Typography variant="body1" component="div">
-                  Author: {book.author}
-                </Typography>
-                <Typography variant="body1" component="div">
-                  Genre: {book.genre}
-                </Typography>
-                <Typography variant="body1" component="div">
-                  Availability:{" "}
-                  {book.availability ? "Available" : "Not Available"}
-                </Typography>
-                <Typography variant="body1" component="div">
-                  Operation Type: {book.operationType}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <>
+          <hr />
+          <button
+            className="addABookButton"
+            style={{ margin: "20px 20px 0" }}
+            onClick={handleOpenModal}
+          >
+            Add a Book
+          </button>
+          <div
+            style={{
+              display: "flex",
+              gap: "30px",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              padding: "40px",
+            }}
+          >
+            {books.map((book) => (
+              <Card key={book.id} className="bookCard">
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={NoBooksBanner}
+                  alt="No book"
+                />
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    Title: {book.title}
+                  </Typography>
+                  <Typography variant="body1" component="div">
+                    Author: {book.author}
+                  </Typography>
+                  <Typography variant="body1" component="div">
+                    Genre: {book.genre}
+                  </Typography>
+                  <Typography variant="body1" component="div">
+                    Availability:{" "}
+                    {book.availability ? "Available" : "Not Available"}
+                  </Typography>
+                  <Typography variant="body1" component="div">
+                    Operation Type: {book.operationType}
+                  </Typography>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </>
       )}
-      <AddBookModal isOpen={isModalOpen} onClose={handleCloseModal} />
+      <AddBookModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        fetchData={fetchData}
+      />
     </div>
   );
 };

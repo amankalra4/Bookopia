@@ -21,6 +21,7 @@ export type RegistrationResponse = {
   message: string;
   token: string;
   success: boolean;
+  name: string | null;
 };
 
 const Registration = () => {

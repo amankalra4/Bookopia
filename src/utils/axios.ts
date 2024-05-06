@@ -10,7 +10,7 @@ axiosInstance.interceptors.request.use(
   (config: any) => {
     const token = getLocalStorageItem("token");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.token = token;
     }
     return config;
   },
@@ -35,10 +35,10 @@ const customAxios = {
     axiosInstance.post<T>(url, data, config),
   get: <T>(url: string, config?: AxiosRequestConfig) =>
     axiosInstance.get<T>(url, config),
-  put: (url: string, data?: any, config?: AxiosRequestConfig) =>
-    axiosInstance.put(url, data, config),
-  delete: (url: string, config?: AxiosRequestConfig) =>
-    axiosInstance.delete(url, config),
+  put: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
+    axiosInstance.put<T>(url, data, config),
+  delete: <T>(url: string, config?: AxiosRequestConfig) =>
+    axiosInstance.delete<T>(url, config),
 };
 
 export default customAxios;

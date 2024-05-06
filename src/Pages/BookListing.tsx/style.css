@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  flex-wrap: wrap;
 }
 
 .loadingIndicator {
@@ -16,6 +16,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 30%;
 }
 
 .noBooksContent {

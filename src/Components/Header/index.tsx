@@ -4,7 +4,7 @@ import { deepOrange } from "@mui/material/colors";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Avatar } from "@mui/material";
-import { getLocalStorageItem, removeLocalStorageItem } from "../../utils";
+import { clearLocalStorage, getLocalStorageItem } from "../../utils";
 import { ROUTES } from "../../utils/constants";
 import Logo from "../../assets/logo.png";
 import "./styles.css";
@@ -41,7 +41,7 @@ const Header = () => {
 
   const handleLogout = () => {
     navigate(ROUTES.HOME);
-    removeLocalStorageItem("token");
+    clearLocalStorage();
     handleMenuClose();
     window.location.reload();
   };
@@ -71,7 +71,7 @@ const Header = () => {
             style={{ cursor: "pointer" }}
             onClick={handleMenuOpen}
           >
-            N
+            {getLocalStorageItem("userName")?.charAt(0)}
           </Avatar>
         ) : (
           <>

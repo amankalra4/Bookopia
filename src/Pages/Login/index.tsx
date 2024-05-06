@@ -36,6 +36,7 @@ const Login = () => {
       );
       if (response?.data?.success) {
         setLocalStorageItem("token", response?.data?.token);
+        setLocalStorageItem("userName", response?.data?.name!);
         setSuccessData({ isOpen: true, message: response?.data?.message });
         navigate(ROUTES.HOME);
       } else {
