@@ -1,11 +1,19 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
 import "./styles.css";
 import customAxios from "../../utils/axios";
 import { Button, CircularProgress } from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
 import { setLocalStorageItem } from "../../utils";
+import { genres } from "./constants";
+import { IBooksList } from "../BookListing.tsx";
 
 export interface IProfileResponse {
   id: number;
@@ -24,29 +32,28 @@ export interface IUpdateUserData {
   success: boolean;
 }
 
+export type Genres = [
+  "Science Fiction",
+  "Fantasy",
+  "Mystery",
+  "Romance",
+  "Thriller"
+];
+
 const PersonalInformation = ({
   userData,
   handlePersonalInfoSubmit,
   isProfileUpdating,
 }: {
   userData: IProfileResponse;
-  handlePersonalInfoSubmit: (
-    name: string,
-    email: string,
-    location: string
-  ) => Promise<void>;
+  handlePersonalInfoSubmit: (name: string, location: string) => Promise<void>;
   isProfileUpdating: boolean;
 }) => {
   const [name, setName] = useState(userData.name);
-  const [email, setEmail] = useState(userData.email);
   const [location, setLocation] = useState(userData.location);
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
-  };
-
-  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
   };
 
   const handleChangeLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +61,7 @@ const PersonalInformation = ({
   };
 
   const handleSubmit = () => {
-    handlePersonalInfoSubmit(name, email, location);
+    handlePersonalInfoSubmit(name, location);
   };
 
   return (
@@ -72,8 +79,7 @@ const PersonalInformation = ({
         <TextField
           id="email"
           label="Email"
-          value={email}
-          onChange={handleChangeEmail}
+          value={userData.email}
           variant="outlined"
           fullWidth
           margin="normal"
@@ -97,37 +103,91 @@ const PersonalInformation = ({
         color="primary"
         onClick={handleSubmit}
       >
-        {isProfileUpdating ? <CircularProgress /> : "Submit"}
+        {isProfileUpdating ? <CircularProgress color="inherit" /> : "Submit"}
       </Button>
     </div>
   );
 };
 
-const BooksOwned = ({ ownedBooks }: any) => {
+const BooksOwned = ({ ownedBooks }: { ownedBooks: IBooksList[] }) => {
+  console.log("ownedBooks: ", ownedBooks);
   return (
     <div className="tabContent">
       <div className="booksOwnedContainer">
         <h2>Books Owned</h2>
-        <ul>
-          {/* {[].map((book) => (
-            <li key={book.id}>{book.title}</li>
-          ))} */}
-        </ul>
+        <List>
+          {ownedBooks.map((book) => (
+            <React.Fragment key={book.id}>
+              <ListItem>
+                <ListItemText
+                  primary={`Title: ${book.title}`}
+                  secondary={`Author: ${book.author}`}
+                />
+              </ListItem>
+              <Divider />
+            </React.Fragment>
+          ))}
+        </List>
       </div>
     </div>
   );
 };
 
-const YourPreferences = ({ preferences }: any) => {
+const YourPreferences = ({
+  yourGenres,
+  handleGenreSubmit,
+  isGenreUpdating,
+}: {
+  yourGenres: Genres[];
+  handleGenreSubmit: (genres: Genres[]) => Promise<void>;
+  isGenreUpdating: boolean;
+}) => {
+  const [selectedGenres, setSelectedGenres] = useState<Genres[]>(yourGenres);
+
+  const handleGenreChange = (event: any) => {
+    const { name, checked } = event.target;
+    if (checked) {
+      setSelectedGenres([...selectedGenres, name]);
+    } else {
+      setSelectedGenres(selectedGenres.filter((genre) => genre !== name));
+    }
+  };
+
+  const handleSubmit = () => {
+    handleGenreSubmit(selectedGenres);
+  };
+
   return (
-    <div className="tabContent">
-      <div className="preferencesContainer">
-        <h2>Your Preferences</h2>
-        <ul>
-          {[].map((preference, index) => (
-            <li key={index}>{preference}</li>
-          ))}
-        </ul>
+    <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          gap: "10px",
+        }}
+      >
+        <h2>Your Genres</h2>
+        {genres.map((genre) => (
+          <FormControlLabel
+            key={genre}
+            control={
+              <Checkbox
+                checked={selectedGenres.includes(genre as unknown as Genres)}
+                onChange={handleGenreChange}
+                name={genre}
+              />
+            }
+            label={genre}
+          />
+        ))}
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          style={{ marginTop: "16px" }}
+        >
+          {isGenreUpdating ? <CircularProgress color="inherit" /> : "Submit"}
+        </Button>
       </div>
     </div>
   );
@@ -138,10 +198,10 @@ const Profile = () => {
   const [userData, setUserData] = useState<IProfileResponse>(
     {} as IProfileResponse
   );
-  const [ownedBooks, setOwnedBooks] = useState([]);
-  const [preferences, setPreferences] = useState([]);
+  const [ownedBooks, setOwnedBooks] = useState<IBooksList[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isProfileUpdating, setIsProfileUpdating] = useState(false);
+  const [isGenreUpdating, setIsGenreUpdating] = useState(false);
 
   const getUserDetails = async () => {
     try {
@@ -160,27 +220,38 @@ const Profile = () => {
     }
   };
 
+  const fetchBooksData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await customAxios.get<IBooksList[]>("books/book-list");
+      setOwnedBooks([...response.data]);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {}, []);
+
   useEffect(() => {
     getUserDetails();
+    fetchBooksData();
   }, []);
 
   const handleChange = (event: any, newValue: any) => {
     setValue(newValue);
   };
 
-  const handlePersonalInfoSubmit = async (
-    name: string,
-    email: string,
-    location: string
-  ) => {
+  const handlePersonalInfoSubmit = async (name: string, location: string) => {
     try {
       setIsProfileUpdating(true);
       const updateResponse = await customAxios.put<IUpdateUserData>(
         "user/update-user",
         {
           name,
-          email,
           location,
+          email: userData.email,
         }
       );
       if (updateResponse.status === 200) {
@@ -191,6 +262,27 @@ const Profile = () => {
       console.error("Error updating profile:", error);
     } finally {
       setIsProfileUpdating(false);
+    }
+  };
+
+  const handleGenreSubmit = async (selectedGenres: Genres[]) => {
+    try {
+      setIsGenreUpdating(true);
+      const updateResponse = await customAxios.put<IUpdateUserData>(
+        "user/update-user",
+        {
+          genre: selectedGenres[0],
+          email: userData.email,
+        }
+      );
+      if (updateResponse.status === 200) {
+        getUserDetails();
+      }
+      console.log("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    } finally {
+      setIsGenreUpdating(false);
     }
   };
 
@@ -213,6 +305,7 @@ const Profile = () => {
             onChange={handleChange}
             aria-label="Vertical tabs example"
             sx={{ height: "100%" }}
+            style={{ top: "40px", position: "relative" }}
           >
             <Tab label="Personal Information" />
             <Tab label="Books Owned" />
@@ -227,7 +320,13 @@ const Profile = () => {
               />
             )}
             {value === 1 && <BooksOwned ownedBooks={ownedBooks} />}
-            {value === 2 && <YourPreferences preferences={preferences} />}
+            {value === 2 && (
+              <YourPreferences
+                yourGenres={["Fantasy", "Mystery"] as unknown as Genres[]}
+                handleGenreSubmit={handleGenreSubmit}
+                isGenreUpdating={isGenreUpdating}
+              />
+            )}
           </div>
         </>
       )}

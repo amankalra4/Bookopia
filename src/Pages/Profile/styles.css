@@ -1,7 +1,6 @@
 .tabsContainer {
   display: flex;
   justify-content: center;
-  height: 100vh;
   gap: 100px;
   margin-top: 40px;
   align-items: baseline;

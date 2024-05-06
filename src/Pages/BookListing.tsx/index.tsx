@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import customAxios from "../../utils/axios";
 import Skeleton from "@mui/material/Skeleton";
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import NoBooksBanner from "../../assets/no-book-banner.webp";
 import "./style.css";
 import AddBookModal from "../../Components/AddBookModal";
+import { getLocalStorageItem } from "../../utils";
+import BookCard from "../../Components/BookCard";
 
 export interface IBooksList {
   id: number;
@@ -26,6 +27,7 @@ const BookListing = () => {
   const [books, setBooks] = useState<IBooksList[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const token = getLocalStorageItem("token");
 
   const fetchData = async () => {
     try {
@@ -72,22 +74,30 @@ const BookListing = () => {
         </div>
       ) : books.length === 0 ? (
         <div className="noBooksContainer">
-          <div className="noBooksContent">
-            <img
-              src={NoBooksBanner}
-              alt="No Books Banner"
-              style={{ borderRadius: "16px" }}
-            />
-            <div>
-              <p>No books available</p>
-              <button className="addABookButton" onClick={handleOpenModal}>
-                Add a Book
-              </button>
+          {token ? (
+            <div className="noBooksContent">
+              <img
+                src={NoBooksBanner}
+                alt="No Books Banner"
+                style={{ borderRadius: "16px" }}
+              />
+              <div>
+                <p>No books available</p>
+                <button className="addABookButton" onClick={handleOpenModal}>
+                  Add a Book
+                </button>
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       ) : (
-        <>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
           <hr />
           <button
             className="addABookButton"
@@ -106,35 +116,10 @@ const BookListing = () => {
             }}
           >
             {books.map((book) => (
-              <Card key={book.id} className="bookCard">
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={NoBooksBanner}
-                  alt="No book"
-                />
-                <CardContent>
-                  <Typography variant="h5" component="div">
-                    Title: {book.title}
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Author: {book.author}
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Genre: {book.genre}
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Availability:{" "}
-                    {book.availability ? "Available" : "Not Available"}
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Operation Type: {book.operationType}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <BookCard key={book.id} book={book} />
             ))}
           </div>
-        </>
+        </div>
       )}
       <AddBookModal
         isOpen={isModalOpen}
