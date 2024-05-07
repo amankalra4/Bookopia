@@ -1,11 +1,11 @@
 import HomeScreenImage from "../../assets/home-screen-image.png";
-import { whatWeDoContent } from "./constants";
+import { homePageContent, whatWeDoContent } from "./constants";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../utils/constants";
 import "./styles.css";
 import { getLocalStorageItem } from "../../utils";
 
-function Home() {
+const Home = () => {
   const token = getLocalStorageItem("token");
   return (
     <div className="homeContainer">
@@ -50,19 +50,12 @@ function Home() {
         ))}
       </div>
       <div className="homePageContent">
-        <p>
-          {`Join Bookopia Today and Start Sharing the Magic of Reading! Join our
-    active book club by creating an account right now.`}
-        </p>
-        <p>
-          {`Savor the excitement of learning about new stories, making connections with
-    other readers, and encouraging a culture of sharing in our
-    community.`}
-        </p>
-        <p>{`Here at Bookopia, each book has a tale to tell. Welcome.`}</p>
+        {homePageContent.map((item) => (
+          <p key={item}>{item}</p>
+        ))}
       </div>
     </div>
   );
-}
+};
 
 export default Home;

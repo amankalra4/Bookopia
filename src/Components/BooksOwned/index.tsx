@@ -1,5 +1,5 @@
 import React from "react";
-import { IBooksList } from "../../Pages/BookListing.tsx";
+import { IBooksList } from "../../Pages/BookListing.tsx/interface";
 import { Divider, List, ListItem, ListItemText } from "@mui/material";
 
 const BooksOwned = ({ ownedBooks }: { ownedBooks: IBooksList[] }) => {

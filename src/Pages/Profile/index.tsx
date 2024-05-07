@@ -4,12 +4,12 @@ import Tab from "@mui/material/Tab";
 import customAxios from "../../utils/axios";
 import { CircularProgress } from "@mui/material";
 import { errorToastWrapper, setLocalStorageItem } from "../../utils";
-import { IBooksList } from "../BookListing.tsx";
 import YourPreferences from "../../Components/YourPreferences";
 import BooksOwned from "../../Components/BooksOwned";
 import "./styles.css";
 import PersonalInformation from "../../Components/PersonalInformation";
 import { IProfileResponse, IUpdateUserData } from "./interface";
+import { IBooksList } from "../BookListing.tsx/interface";
 
 export type Genres = [
   "Science Fiction",
@@ -26,6 +26,7 @@ const Profile = () => {
   );
   const [ownedBooks, setOwnedBooks] = useState<IBooksList[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBooksDataLoading, setIsBooksDataLoading] = useState(false);
   const [isProfileUpdating, setIsProfileUpdating] = useState(false);
   const [isGenreUpdating, setIsGenreUpdating] = useState(false);
 
@@ -48,13 +49,13 @@ const Profile = () => {
 
   const fetchBooksData = async () => {
     try {
-      setIsLoading(true);
+      setIsBooksDataLoading(true);
       const response = await customAxios.get<IBooksList[]>("books/book-list");
       setOwnedBooks([...response.data]);
     } catch (error) {
       errorToastWrapper("Error while fetching books");
     } finally {
-      setIsLoading(false);
+      setIsBooksDataLoading(false);
     }
   };
 
@@ -110,7 +111,7 @@ const Profile = () => {
 
   return (
     <div className="tabsContainer">
-      {isLoading ? (
+      {isLoading || isBooksDataLoading ? (
         <CircularProgress
           style={{
             justifyContent: "center",

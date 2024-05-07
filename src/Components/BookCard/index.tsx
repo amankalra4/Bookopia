@@ -6,10 +6,10 @@ import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import { getRandomImage } from "../../utils";
 import "./styles.css";
-import { IBooksList } from "../../Pages/BookListing.tsx";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import { ROUTES } from "../../utils/constants";
+import { IBooksList } from "../../Pages/BookListing.tsx/interface";
 
 type Image = {
   image: string;
