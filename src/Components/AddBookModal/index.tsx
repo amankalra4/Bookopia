@@ -1,23 +1,41 @@
 import { useState } from "react";
-import { Modal, TextField, Button, MenuItem } from "@mui/material";
+import {
+  Modal,
+  TextField,
+  Button,
+  MenuItem,
+  CircularProgress,
+} from "@mui/material";
 import customAxios from "../../utils/axios";
+import { IBookData } from "../BookCard";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../utils/constants";
 
 const AddBookModal = ({
   isOpen,
   onClose,
   fetchData,
+  isBookUpdate,
+  bookData = null,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  fetchData: () => Promise<void>;
+  fetchData?: () => Promise<void>;
+  isBookUpdate?: boolean;
+  bookData?: IBookData | null;
 }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    author: "",
-    condition: "",
-    genre: "",
-    operationType: "",
-  });
+  const [formData, setFormData] = useState(
+    bookData || {
+      title: "",
+      author: "",
+      condition: "",
+      genre: "",
+      operationType: "",
+      image: "",
+    }
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (event: any) => {
     const { name, value } = event.target;
@@ -29,12 +47,29 @@ const AddBookModal = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      await customAxios.post("books/add-book", formData);
-      fetchData();
-      onClose();
-    } catch (error) {
-      console.error("Error adding book:", error);
+    const { image, ...bookWithoutImage } = formData;
+    if (isBookUpdate) {
+      try {
+        setIsLoading(true);
+        await customAxios.put("books/update-book", bookWithoutImage);
+        onClose();
+        navigate(ROUTES.BOOKS_LISTING);
+      } catch (error) {
+        console.error("Error adding book:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      try {
+        setIsLoading(true);
+        await customAxios.post("books/add-book", bookWithoutImage);
+        fetchData && fetchData();
+        onClose();
+      } catch (error) {
+        console.error("Error adding book:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -121,7 +156,13 @@ const AddBookModal = ({
             }
             style={{ justifyContent: "center" }}
           >
-            Submit
+            {isLoading ? (
+              <CircularProgress color="inherit" />
+            ) : isBookUpdate ? (
+              "Update"
+            ) : (
+              "Submit"
+            )}
           </Button>
         </form>
       </div>

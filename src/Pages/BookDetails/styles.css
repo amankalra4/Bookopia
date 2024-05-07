@@ -1,0 +1,50 @@
+.bookDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 10%;
+  left: 40%;
+}
+
+.bookHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px;
+  gap: 100px;
+}
+
+.actions {
+  display: flex;
+}
+
+.bookContent {
+  display: flex;
+}
+
+.bookImageContainer {
+  margin-right: 20px;
+}
+
+.bookImageContainer img {
+  width: 300px;
+}
+
+.deleteModal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.modalActions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}

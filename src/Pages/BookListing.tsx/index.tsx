@@ -82,7 +82,7 @@ const BookListing = () => {
                 style={{ borderRadius: "16px" }}
               />
               <div>
-                <p>No books available</p>
+                <p>You do not have any books yet!!</p>
                 <button className="addABookButton" onClick={handleOpenModal}>
                   Add a Book
                 </button>
@@ -91,17 +91,14 @@ const BookListing = () => {
           ) : null}
         </div>
       ) : (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end",
-          }}
-        >
-          <hr />
+        <div>
           <button
             className="addABookButton"
-            style={{ margin: "20px 20px 0" }}
+            style={{
+              margin: "20px 20px 0",
+              position: "relative",
+              left: "10px",
+            }}
             onClick={handleOpenModal}
           >
             Add a Book

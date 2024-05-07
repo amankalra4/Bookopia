@@ -7,9 +7,19 @@ import Chip from "@mui/material/Chip";
 import { getRandomImage } from "../../utils";
 import "./styles.css";
 import { IBooksList } from "../../Pages/BookListing.tsx";
+import { useNavigate } from "react-router-dom";
+import queryString from "query-string";
+import { ROUTES } from "../../utils/constants";
+
+type Image = {
+  image: string;
+};
+
+export type IBookData = Omit<IBooksList, "provider"> & Image;
 
 const BookCard = ({ book }: { book: IBooksList }) => {
   const [randomImage, setRandomImage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setRandomImage(getRandomImage());
@@ -23,8 +33,27 @@ const BookCard = ({ book }: { book: IBooksList }) => {
     ? { color: "green" }
     : { color: "red" };
 
+  const handleCardClick = () => {
+    const bookData: IBookData = {
+      author: book.author,
+      availability: book.availability,
+      condition: book.condition,
+      genre: book.genre,
+      operationType: book.operationType,
+      title: book.title,
+      image: randomImage,
+      id: book.id,
+    };
+    const queryParams = queryString.stringify(bookData);
+    navigate(`${ROUTES.BOOK_DETAILS}?${queryParams}`);
+  };
+
   return (
-    <Card className="bookCard" style={{ borderRadius: "10px" }}>
+    <Card
+      className="bookCard"
+      style={{ borderRadius: "10px", cursor: "pointer" }}
+      onClick={handleCardClick}
+    >
       <CardMedia
         component="img"
         height="140"
@@ -40,7 +69,7 @@ const BookCard = ({ book }: { book: IBooksList }) => {
             justifyContent: "space-between",
             textTransform: "capitalize",
             marginBottom: "16px",
-            alignItems: "center",
+            alignItems: "flex-end",
             alignContent: "flex-end",
           }}
         >
@@ -65,6 +94,9 @@ const BookCard = ({ book }: { book: IBooksList }) => {
         </Typography>
         <Typography variant="h6" component="div" className="textTransform">
           Genre: {book.genre}
+        </Typography>
+        <Typography variant="h6" component="div" className="textTransform">
+          {book.condition} Book
         </Typography>
         <Typography
           variant="h6"

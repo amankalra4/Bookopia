@@ -110,7 +110,6 @@ const PersonalInformation = ({
 };
 
 const BooksOwned = ({ ownedBooks }: { ownedBooks: IBooksList[] }) => {
-  console.log("ownedBooks: ", ownedBooks);
   return (
     <div className="tabContent">
       <div className="booksOwnedContainer">
@@ -232,8 +231,6 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     getUserDetails();
     fetchBooksData();
@@ -257,7 +254,6 @@ const Profile = () => {
       if (updateResponse.status === 200) {
         getUserDetails();
       }
-      console.log("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);
     } finally {
@@ -278,7 +274,6 @@ const Profile = () => {
       if (updateResponse.status === 200) {
         getUserDetails();
       }
-      console.log("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);
     } finally {
@@ -293,8 +288,8 @@ const Profile = () => {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            position: "relative",
-            top: "30%",
+            position: "absolute",
+            top: "40%",
           }}
         />
       ) : (
@@ -309,7 +304,7 @@ const Profile = () => {
           >
             <Tab label="Personal Information" />
             <Tab label="Books Owned" />
-            <Tab label="Your Preferences" />
+            <Tab label="Your Genres" />
           </Tabs>
           <div className="tabContentContainer">
             {value === 0 && (

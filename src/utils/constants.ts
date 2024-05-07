@@ -11,7 +11,8 @@ export const ROUTES = {
   REGISTER: "/register",
   BOOKS_LISTING: "/books-listing",
   PROFILE: "/profile",
-};
+  BOOK_DETAILS: "/book-details",
+} as const;
 
 export const images = [
   CoverImage1,

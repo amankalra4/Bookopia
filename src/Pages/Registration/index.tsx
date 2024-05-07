@@ -80,6 +80,7 @@ const Registration = () => {
         const { token, success = false } = registrationResponse.data;
         if (success) {
           setLocalStorageItem("token", token);
+          setLocalStorageItem("userName", fullName);
           navigate(ROUTES.HOME);
         }
       } catch (err: any) {

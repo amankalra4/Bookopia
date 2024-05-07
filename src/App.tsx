@@ -13,6 +13,7 @@ import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import Profile from "./Pages/Profile";
 import "./App.css";
+import BookDetails from "./Pages/BookDetails";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path={ROUTES.LOGIN} element={<Login />} />
               <Route path={ROUTES.BOOKS_LISTING} element={<BookListing />} />
               <Route path={ROUTES.PROFILE} element={<Profile />} />
+              <Route path={ROUTES.BOOK_DETAILS} element={<BookDetails />} />
             </Route>
           </Routes>
         </div>
