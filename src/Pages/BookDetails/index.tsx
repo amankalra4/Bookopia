@@ -74,11 +74,25 @@ const BookDetails = () => {
         <Typography variant="h4" style={{ textTransform: "capitalize" }}>
           {book.title}
         </Typography>
-        <Typography variant="h6">Author: {book.author}</Typography>
-        <Typography variant="h6">Condition: {book.condition}</Typography>
-        <Typography variant="h6">Genre: {book.genre}</Typography>
+        <Typography variant="h6">
+          <b>Author:</b> {book.author}
+        </Typography>
+        <Typography variant="h6">
+          <b>Condition:</b> {book.condition}
+        </Typography>
+        <Typography variant="h6">
+          <b>Genre:</b> {book.genre}
+        </Typography>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px",
+          position: "relative",
+          top: "50px",
+        }}
+      >
         <Button variant="contained" color="primary" onClick={handleUpdate}>
           Update
         </Button>

@@ -89,17 +89,17 @@ const BookCard = ({ book }: { book: IBooksList }) => {
             />
           </Typography>
         </Typography>
-        <Typography variant="h6" component="div" className="textTransform">
-          Author: {book.author}
+        <Typography variant="body1" component="div" className="textTransform">
+          <b>Author:</b> {book.author}
         </Typography>
-        <Typography variant="h6" component="div" className="textTransform">
-          Genre: {book.genre}
+        <Typography variant="body1" component="div" className="textTransform">
+          <b>Genre:</b> {book.genre}
         </Typography>
-        <Typography variant="h6" component="div" className="textTransform">
+        <Typography variant="body1" component="div" className="textTransform">
           {book.condition} Book
         </Typography>
         <Typography
-          variant="h6"
+          variant="body1"
           component="div"
           className="textTransform"
           style={availabilityStyle}
