@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import customAxios from "../../utils/axios";
 import { ROUTES } from "../../utils/constants";
-import { setLocalStorageItem } from "../../utils";
+import { errorToastWrapper, setLocalStorageItem } from "../../utils";
 import "./styles.css";
 
 type FormData = {
@@ -84,7 +84,7 @@ const Registration = () => {
           navigate(ROUTES.HOME);
         }
       } catch (err: any) {
-        console.error(err.response.data);
+        errorToastWrapper("Error while registration");
       }
     } else {
       setErrors(errors);

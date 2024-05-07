@@ -7,6 +7,7 @@ import "./styles.css";
 import { IBookData } from "../../Components/BookCard";
 import { ROUTES } from "../../utils/constants";
 import customAxios from "../../utils/axios";
+import { errorToastWrapper } from "../../utils";
 
 interface IDeleteResponse {
   message: string;
@@ -48,7 +49,7 @@ const BookDetails = () => {
         `books/delete-book?id=${book.id}`
       );
     } catch (error) {
-      console.error("error in deleting book");
+      errorToastWrapper("Error while deleting book");
     } finally {
       setIsDeleting(false);
     }

@@ -10,6 +10,7 @@ import customAxios from "../../utils/axios";
 import { IBookData } from "../BookCard";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../utils/constants";
+import { errorToastWrapper } from "../../utils";
 
 const AddBookModal = ({
   isOpen,
@@ -55,7 +56,7 @@ const AddBookModal = ({
         onClose();
         navigate(ROUTES.BOOKS_LISTING);
       } catch (error) {
-        console.error("Error adding book:", error);
+        errorToastWrapper("Error while updating book");
       } finally {
         setIsLoading(false);
       }
@@ -66,7 +67,7 @@ const AddBookModal = ({
         fetchData && fetchData();
         onClose();
       } catch (error) {
-        console.error("Error adding book:", error);
+        errorToastWrapper("Error while adding book");
       } finally {
         setIsLoading(false);
       }
@@ -86,7 +87,7 @@ const AddBookModal = ({
           borderRadius: "5px",
         }}
       >
-        <h2>Add a Book</h2>
+        <h2>{isBookUpdate ? "Update" : "Add"} a Book</h2>
         <form onSubmit={handleSubmit}>
           <TextField
             name="title"

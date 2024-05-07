@@ -4,6 +4,7 @@ import {
   Route,
   Outlet,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { ROUTES } from "./utils/constants";
 import Home from "./Pages/Home";
 import Registration from "./Pages/Registration";
@@ -12,8 +13,9 @@ import BookListing from "./Pages/BookListing.tsx";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import Profile from "./Pages/Profile";
-import "./App.css";
 import BookDetails from "./Pages/BookDetails";
+import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
         </div>
         <Footer />
       </div>
+      <ToastContainer />
     </Router>
   );
 }

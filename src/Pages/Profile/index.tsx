@@ -1,36 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import TextField from "@mui/material/TextField";
-import "./styles.css";
 import customAxios from "../../utils/axios";
-import { Button, CircularProgress } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import Divider from "@mui/material/Divider";
-import { setLocalStorageItem } from "../../utils";
-import { genres } from "./constants";
+import { CircularProgress } from "@mui/material";
+import { errorToastWrapper, setLocalStorageItem } from "../../utils";
 import { IBooksList } from "../BookListing.tsx";
-
-export interface IProfileResponse {
-  id: number;
-  name: string;
-  email: string;
-  location: string;
-  password: string;
-  preferences: null;
-  genre: string;
-}
-
-export interface IUpdateUserData {
-  message: string;
-  token: null;
-  name: null;
-  success: boolean;
-}
+import YourPreferences from "../../Components/YourPreferences";
+import BooksOwned from "../../Components/BooksOwned";
+import "./styles.css";
+import PersonalInformation from "../../Components/PersonalInformation";
+import { IProfileResponse, IUpdateUserData } from "./interface";
 
 export type Genres = [
   "Science Fiction",
@@ -39,158 +18,6 @@ export type Genres = [
   "Romance",
   "Thriller"
 ];
-
-const PersonalInformation = ({
-  userData,
-  handlePersonalInfoSubmit,
-  isProfileUpdating,
-}: {
-  userData: IProfileResponse;
-  handlePersonalInfoSubmit: (name: string, location: string) => Promise<void>;
-  isProfileUpdating: boolean;
-}) => {
-  const [name, setName] = useState(userData.name);
-  const [location, setLocation] = useState(userData.location);
-
-  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
-
-  const handleChangeLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value);
-  };
-
-  const handleSubmit = () => {
-    handlePersonalInfoSubmit(name, location);
-  };
-
-  return (
-    <div className="tabContent">
-      <div className="personalInfoContainer">
-        <TextField
-          id="name"
-          label="Name"
-          value={name}
-          onChange={handleChangeName}
-          variant="outlined"
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="email"
-          label="Email"
-          value={userData.email}
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-        <TextField
-          id="location"
-          label="Location"
-          value={location}
-          onChange={handleChangeLocation}
-          variant="outlined"
-          fullWidth
-          margin="normal"
-        />
-      </div>
-      <Button
-        style={{ position: "absolute", left: "40%", marginTop: "20px" }}
-        variant="contained"
-        color="primary"
-        onClick={handleSubmit}
-      >
-        {isProfileUpdating ? <CircularProgress color="inherit" /> : "Submit"}
-      </Button>
-    </div>
-  );
-};
-
-const BooksOwned = ({ ownedBooks }: { ownedBooks: IBooksList[] }) => {
-  return (
-    <div className="tabContent">
-      <div className="booksOwnedContainer">
-        <h2>Books Owned</h2>
-        <List>
-          {ownedBooks.map((book) => (
-            <React.Fragment key={book.id}>
-              <ListItem>
-                <ListItemText
-                  primary={`Title: ${book.title}`}
-                  secondary={`Author: ${book.author}`}
-                />
-              </ListItem>
-              <Divider />
-            </React.Fragment>
-          ))}
-        </List>
-      </div>
-    </div>
-  );
-};
-
-const YourPreferences = ({
-  yourGenres,
-  handleGenreSubmit,
-  isGenreUpdating,
-}: {
-  yourGenres: Genres[];
-  handleGenreSubmit: (genres: Genres[]) => Promise<void>;
-  isGenreUpdating: boolean;
-}) => {
-  const [selectedGenres, setSelectedGenres] = useState<Genres[]>(yourGenres);
-
-  const handleGenreChange = (event: any) => {
-    const { name, checked } = event.target;
-    if (checked) {
-      setSelectedGenres([...selectedGenres, name]);
-    } else {
-      setSelectedGenres(selectedGenres.filter((genre) => genre !== name));
-    }
-  };
-
-  const handleSubmit = () => {
-    handleGenreSubmit(selectedGenres);
-  };
-
-  return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          gap: "10px",
-        }}
-      >
-        <h2>Your Genres</h2>
-        {genres.map((genre) => (
-          <FormControlLabel
-            key={genre}
-            control={
-              <Checkbox
-                checked={selectedGenres.includes(genre as unknown as Genres)}
-                onChange={handleGenreChange}
-                name={genre}
-              />
-            }
-            label={genre}
-          />
-        ))}
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          style={{ marginTop: "16px" }}
-        >
-          {isGenreUpdating ? <CircularProgress color="inherit" /> : "Submit"}
-        </Button>
-      </div>
-    </div>
-  );
-};
 
 const Profile = () => {
   const [value, setValue] = useState(0);
@@ -213,7 +40,7 @@ const Profile = () => {
         setUserData(response.data);
       }
     } catch (error) {
-      console.error("Error getting profile:", error);
+      errorToastWrapper("Error while getting profile");
     } finally {
       setIsLoading(false);
     }
@@ -225,7 +52,7 @@ const Profile = () => {
       const response = await customAxios.get<IBooksList[]>("books/book-list");
       setOwnedBooks([...response.data]);
     } catch (error) {
-      console.error("Error fetching books:", error);
+      errorToastWrapper("Error while fetching books");
     } finally {
       setIsLoading(false);
     }
@@ -255,7 +82,7 @@ const Profile = () => {
         getUserDetails();
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
+      errorToastWrapper("Error while updating profile");
     } finally {
       setIsProfileUpdating(false);
     }
@@ -275,7 +102,7 @@ const Profile = () => {
         getUserDetails();
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
+      errorToastWrapper("Error while updating profile");
     } finally {
       setIsGenreUpdating(false);
     }

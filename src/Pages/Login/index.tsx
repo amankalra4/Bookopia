@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CircularProgress, SnackbarContent } from "@mui/material";
-import Snackbar from "@mui/material/Snackbar";
+import { CircularProgress } from "@mui/material";
 import { ROUTES } from "../../utils/constants";
 import customAxios from "../../utils/axios";
 import { RegistrationResponse } from "../Registration";
-import { setLocalStorageItem } from "../../utils";
+import { errorToastWrapper, setLocalStorageItem } from "../../utils";
 import "./styles.css";
 
 const Login = () => {
@@ -13,11 +12,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [successData, setSuccessData] = useState({
-    isOpen: false,
-    message: "",
-  });
-  const [errorData, setErrorData] = useState({ isOpen: false, message: "" });
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -37,16 +31,12 @@ const Login = () => {
       if (response?.data?.success) {
         setLocalStorageItem("token", response?.data?.token);
         setLocalStorageItem("userName", response?.data?.name!);
-        setSuccessData({ isOpen: true, message: response?.data?.message });
         navigate(ROUTES.HOME);
       } else {
-        setErrorData({ isOpen: true, message: response?.data?.message });
+        errorToastWrapper("Something Went Wrong, Please Try again");
       }
     } catch (error) {
-      setErrorData({
-        isOpen: true,
-        message: "Login Failed, Please Try Again!",
-      });
+      errorToastWrapper("Login Failed, Please Try again");
     } finally {
       setLoading(false);
     }
@@ -55,14 +45,6 @@ const Login = () => {
   const validateEmail = (email: string) => {
     const regex = /\S+@\S+\.\S+/;
     return regex.test(email);
-  };
-
-  const handleSuccessClose = () => {
-    setSuccessData({ ...successData, isOpen: false });
-  };
-
-  const handleErrorClose = () => {
-    setErrorData({ ...errorData, isOpen: false });
   };
 
   return (
@@ -104,28 +86,6 @@ const Login = () => {
           </Link>
         </p>
       </div>
-      <Snackbar
-        open={successData.isOpen}
-        onClose={handleSuccessClose}
-        autoHideDuration={2000}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <SnackbarContent
-          message={successData.message}
-          style={{ backgroundColor: "green" }}
-        />
-      </Snackbar>
-      <Snackbar
-        open={errorData.isOpen}
-        onClose={handleErrorClose}
-        autoHideDuration={2000}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <SnackbarContent
-          message={errorData.message}
-          style={{ backgroundColor: "#fa6464" }}
-        />
-      </Snackbar>
     </div>
   );
 };

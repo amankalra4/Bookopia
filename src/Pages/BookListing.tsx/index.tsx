@@ -4,7 +4,7 @@ import Skeleton from "@mui/material/Skeleton";
 import NoBooksBanner from "../../assets/no-book-banner.webp";
 import "./style.css";
 import AddBookModal from "../../Components/AddBookModal";
-import { getLocalStorageItem } from "../../utils";
+import { errorToastWrapper, getLocalStorageItem } from "../../utils";
 import BookCard from "../../Components/BookCard";
 
 export interface IBooksList {
@@ -34,7 +34,7 @@ const BookListing = () => {
       const response = await customAxios.get<IBooksList[]>("books/book-list");
       setBooks([...response.data]);
     } catch (error) {
-      console.error("Error fetching books:", error);
+      errorToastWrapper("Error while fetching book");
     } finally {
       setLoading(false);
     }
