@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import { deepOrange } from "@mui/material/colors";
 import Menu from "@mui/material/Menu";
@@ -11,6 +11,7 @@ import "./styles.css";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const token = getLocalStorageItem("token");
 
@@ -26,7 +27,7 @@ const Header = () => {
     navigate(ROUTES.HOME);
   };
 
-  const handleMenuOpen = (event: any) => {
+  const handleMenuOpen = (event: { currentTarget: SetStateAction<null>; }) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -46,6 +47,31 @@ const Header = () => {
     window.location.reload();
   };
 
+  const handleSearchChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Fetch books based on search term
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/bookopia/books/book-list?search=${searchTerm}`);
+        if (response.ok) {
+          const data = await response.json();
+          
+          // setBooks(data);
+          console.log("data",data)
+        } else {
+          console.error("Error fetching books:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      }
+    };
+
+    fetchData();
+  }, [searchTerm]);
+
   return (
     <header className="header">
       <div className="logo" onClick={navigateToHome}>
@@ -62,17 +88,20 @@ const Header = () => {
           className="inputText"
           type="text"
           placeholder="Search books..."
+          value={searchTerm}
+          onChange={handleSearchChange}
         />
       </div>
       <div className="loginAndRegisterButtons">
         {token?.length ? (
-          <Avatar
-            sx={{ bgcolor: deepOrange[500] }}
-            style={{ cursor: "pointer" }}
-            onClick={handleMenuOpen}
-          >
-            {getLocalStorageItem("userName")?.charAt(0)}
-          </Avatar>
+          // <Avatar
+          //   sx={{ bgcolor: deepOrange[500] }}
+          //   style={{ cursor: "pointer" }}
+          //   onClick={handleMenuOpen}
+          // >
+          //   {getLocalStorageItem("userName")?.charAt(0)}
+          // </Avatar>
+          <h1>avatar</h1>
         ) : (
           <>
             <button onClick={handleLoginClick}>Login</button>
