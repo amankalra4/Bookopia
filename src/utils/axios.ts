@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { getLocalStorageItem } from ".";
+import { errorToastWrapper, getLocalStorageItem } from ".";
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: "https://bookopia123-1e6b890a5fb8.herokuapp.com",
@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error: any) => {
-    console.error("error occurred in request", error);
+    errorToastWrapper("error occurred in request");
     return Promise.reject(error);
   }
 );
@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error: any) => {
-    console.error("error occurred in response", error);
+    errorToastWrapper("error occurred in request");
     return Promise.reject(error);
   }
 );
