@@ -181,7 +181,12 @@ const Header = () => {
           freeSolo
           disableClearable
           options={searchResults.length ? searchResults : []}
-          getOptionLabel={(option: any) => option[selectedFilter]}
+          getOptionLabel={(option: any) => {
+            if (selectedFilter === "genre") {
+              return option?.[selectedFilter]?.[0];
+            }
+            return option[selectedFilter];
+          }}
           loading={loading}
           onInputChange={(event, value) => setSearchTerm(value)}
           style={{ width: "70%", border: "none", borderRadius: "10px" }}

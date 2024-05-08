@@ -5,7 +5,7 @@ export interface IProfileResponse {
   location: string;
   password: string;
   preferences: null;
-  genre: string;
+  genre: string[];
 }
 
 export interface IUpdateUserData {

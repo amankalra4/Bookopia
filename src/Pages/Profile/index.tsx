@@ -95,7 +95,7 @@ const Profile = () => {
       const updateResponse = await customAxios.put<IUpdateUserData>(
         "user/update-user",
         {
-          genre: selectedGenres[0],
+          genre: selectedGenres,
           email: userData.email,
         }
       );
@@ -145,7 +145,7 @@ const Profile = () => {
             {value === 1 && <BooksOwned ownedBooks={ownedBooks} />}
             {value === 2 && (
               <YourPreferences
-                yourGenres={["Fantasy", "Mystery"] as unknown as Genres[]}
+                yourGenres={userData.genre as unknown as Genres[]}
                 handleGenreSubmit={handleGenreSubmit}
                 isGenreUpdating={isGenreUpdating}
               />

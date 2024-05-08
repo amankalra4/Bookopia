@@ -30,7 +30,7 @@ const AddBookModal = ({
       title: "",
       author: "",
       condition: "",
-      genre: "",
+      genre: [""],
       operationType: "",
       image: "",
     }
@@ -49,10 +49,15 @@ const AddBookModal = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { image, ...bookWithoutImage } = formData;
+    const updatedBookData = Object.fromEntries(
+      Object.entries(bookWithoutImage).map(([key, value]) => {
+        return key === "genre" ? [key, [value]] : [key, value];
+      })
+    );
     if (isBookUpdate) {
       try {
         setIsLoading(true);
-        await customAxios.put("books/update-book", bookWithoutImage);
+        await customAxios.put("books/update-book", updatedBookData);
         onClose();
         navigate(ROUTES.BOOKS_LISTING);
       } catch (error) {
@@ -63,7 +68,7 @@ const AddBookModal = ({
     } else {
       try {
         setIsLoading(true);
-        await customAxios.post("books/add-book", bookWithoutImage);
+        await customAxios.post("books/add-book", updatedBookData);
         fetchData && fetchData();
         onClose();
       } catch (error) {
@@ -151,7 +156,7 @@ const AddBookModal = ({
                 formData.title.length > 0 &&
                 formData.author.length > 0 &&
                 formData.condition.length > 0 &&
-                formData.genre.length > 0 &&
+                formData.genre?.[0]?.length > 0 &&
                 formData.operationType.length > 0
               )
             }

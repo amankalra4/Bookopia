@@ -16,7 +16,7 @@ interface IDeleteResponse {
 const BookDetails = () => {
   const [openBookModal, setOpenBookModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [book, setBook] = useState<IBookData>({} as any);
+  const [book, setBook] = useState<IBookData>({} as IBookData);
   const [isDeleting, setIsDeleting] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -74,13 +74,13 @@ const BookDetails = () => {
         <Typography variant="h4" style={{ textTransform: "capitalize" }}>
           {book.title}
         </Typography>
-        <Typography variant="h6">
+        <Typography variant="h6" style={{ textTransform: "capitalize" }}>
           <b>Author:</b> {book.author}
         </Typography>
-        <Typography variant="h6">
+        <Typography variant="h6" style={{ textTransform: "capitalize" }}>
           <b>Condition:</b> {book.condition}
         </Typography>
-        <Typography variant="h6">
+        <Typography variant="h6" style={{ textTransform: "capitalize" }}>
           <b>Genre:</b> {book.genre}
         </Typography>
       </div>

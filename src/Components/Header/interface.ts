@@ -5,7 +5,7 @@ export interface SearchResponse {
   title: string;
   author: string;
   condition: string;
-  genre: string;
+  genre: string[];
   availability: boolean;
   operationType: OperationType;
   provider: Provider;
