@@ -250,9 +250,12 @@ const Header = () => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
+        style={{ position: "absolute", left: "-35px" }}
       >
-        <MenuItem onClick={handleEditProfile}>My Profile</MenuItem>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <div style={{ padding: "10px 20px" }}>
+          <MenuItem onClick={handleEditProfile}>My Profile</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        </div>
       </Menu>
 
       <Modal open={isModalOpen} onClose={handleModalClose}>
