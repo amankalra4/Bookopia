@@ -11,6 +11,7 @@ import { IBookData } from "../BookCard";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../utils/constants";
 import { errorToastWrapper } from "../../utils";
+import "./styles.css";
 
 const AddBookModal = ({
   isOpen,
@@ -81,19 +82,11 @@ const AddBookModal = ({
 
   return (
     <Modal open={isOpen} onClose={onClose}>
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          background: "#fff",
-          padding: "20px",
-          borderRadius: "5px",
-        }}
-      >
-        <h2>{isBookUpdate ? "Update" : "Add"} a Book</h2>
-        <form onSubmit={handleSubmit}>
+      <div className="modalContainer">
+        <h2 style={{ display: "flex", justifyContent: "center" }}>
+          {isBookUpdate ? "Update" : "Add"} Book
+        </h2>
+        <form onSubmit={handleSubmit} className="formContainer">
           <TextField
             name="title"
             label="Title"
@@ -101,7 +94,7 @@ const AddBookModal = ({
             onChange={handleChange}
             fullWidth
             required
-            style={{ marginBottom: "20px" }}
+            className="formMargin"
           />
           <TextField
             name="author"
@@ -110,7 +103,7 @@ const AddBookModal = ({
             onChange={handleChange}
             fullWidth
             required
-            style={{ marginBottom: "20px" }}
+            className="formMargin"
           />
           <TextField
             name="condition"
@@ -120,7 +113,7 @@ const AddBookModal = ({
             onChange={handleChange}
             fullWidth
             required
-            style={{ marginBottom: "20px" }}
+            className="formMargin"
           >
             <MenuItem value="new">New</MenuItem>
             <MenuItem value="old">Old</MenuItem>
@@ -128,11 +121,11 @@ const AddBookModal = ({
           <TextField
             name="genre"
             label="Genre"
-            value={formData.genre}
+            value={formData.genre?.[0]?.length ? formData.genre : ""}
             onChange={handleChange}
             fullWidth
             required
-            style={{ marginBottom: "20px" }}
+            className="formMargin"
           />
           <TextField
             name="operationType"
@@ -142,7 +135,7 @@ const AddBookModal = ({
             onChange={handleChange}
             fullWidth
             required
-            style={{ marginBottom: "20px" }}
+            className="formMargin"
           >
             <MenuItem value="lend">Lend</MenuItem>
             <MenuItem value="borrow">Borrow</MenuItem>
@@ -160,7 +153,6 @@ const AddBookModal = ({
                 formData.operationType.length > 0
               )
             }
-            style={{ justifyContent: "center" }}
           >
             {isLoading ? (
               <CircularProgress color="inherit" />

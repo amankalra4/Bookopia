@@ -48,7 +48,7 @@ const YourPreferences = ({
             key={genre}
             control={
               <Checkbox
-                checked={selectedGenres.includes(genre as unknown as Genres)}
+                checked={selectedGenres?.includes(genre as unknown as Genres)}
                 onChange={handleGenreChange}
                 name={genre}
               />

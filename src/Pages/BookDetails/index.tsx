@@ -70,7 +70,13 @@ const BookDetails = () => {
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
-        <img src={book.image} alt="Book Cover" height={200} width={400} />
+        <img
+          src={book.image}
+          alt="Book Cover"
+          height={200}
+          width={300}
+          style={{ border: "1px solid black", borderRadius: "5px" }}
+        />
         <Typography variant="h4" style={{ textTransform: "capitalize" }}>
           {book.title}
         </Typography>

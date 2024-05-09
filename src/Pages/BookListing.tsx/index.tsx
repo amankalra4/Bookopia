@@ -95,37 +95,39 @@ const BookListing = () => {
           ) : null}
         </div>
       ) : (
-        <div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <button
-              className={`addABookButton loggedInBookButton`}
-              onClick={handleOpenModal}
+        <div style={{ width: "80%" }}>
+          {token ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
-              Add a Book
-            </button>
-            <div className="loggedInBookButton">
-              <Chip
-                label="Books to be Lent"
-                variant={showLentBooks ? "filled" : "outlined"}
-                style={{ cursor: "pointer" }}
-                onClick={handleToggleLentBooks}
-                color={showLentBooks ? "primary" : "default"}
-              />
-              <Chip
-                label="Books to be Borrowed"
-                variant={showBorrowedBooks ? "filled" : "outlined"}
-                style={{ marginLeft: "20px", cursor: "pointer" }}
-                onClick={handleToggleBorrowedBooks}
-                color={showBorrowedBooks ? "primary" : "default"}
-              />
+              <button
+                className={`addABookButton loggedInBookButton`}
+                onClick={handleOpenModal}
+              >
+                Add a Book
+              </button>
+              <div className="loggedInBookButton">
+                <Chip
+                  label="Books to be Lent"
+                  variant={showLentBooks ? "filled" : "outlined"}
+                  style={{ cursor: "pointer" }}
+                  onClick={handleToggleLentBooks}
+                  color="primary"
+                />
+                <Chip
+                  label="Books to be Borrowed"
+                  variant={showBorrowedBooks ? "filled" : "outlined"}
+                  style={{ marginLeft: "20px", cursor: "pointer" }}
+                  onClick={handleToggleBorrowedBooks}
+                  color="primary"
+                />
+              </div>
             </div>
-          </div>
+          ) : null}
           <div className="bookCardContainer">{renderBooks()}</div>
         </div>
       )}

@@ -1,3 +1,17 @@
 .textTransform {
   text-transform: capitalize;
 }
+
+.bookCard {
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.typography {
+  display: flex;
+  justify-content: space-between;
+  text-transform: capitalize;
+  margin-bottom: 16px;
+  align-items: flex-end;
+  align-content: flex-end;
+}

@@ -1,0 +1,20 @@
+.modalContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 50%;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.formMargin {
+  margin-bottom: 20px !important;
+}

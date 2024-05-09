@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "../../utils/constants";
 import "./styles.css";
 import { getLocalStorageItem } from "../../utils";
+import { Button } from "@mui/material";
 
 const Home = () => {
   const token = getLocalStorageItem("token");
@@ -30,14 +31,8 @@ const Home = () => {
               <span>Join Us</span>
             </Link>
           )}
-          <Link
-            to={ROUTES.BOOKS_LISTING}
-            style={{
-              backgroundColor: "#3d5150",
-            }}
-            className="homePageButtons"
-          >
-            <span>Find Books</span>
+          <Link to={ROUTES.BOOKS_LISTING} className="homePageButtons">
+            <Button variant="contained">Find Books</Button>
           </Link>
         </div>
       </section>

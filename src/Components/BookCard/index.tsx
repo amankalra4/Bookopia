@@ -4,12 +4,12 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
-import { getRandomImage } from "../../utils";
-import "./styles.css";
+import { getLocalStorageItem, getRandomImage } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import { ROUTES } from "../../utils/constants";
 import { IBooksList } from "../../Pages/BookListing.tsx/interface";
+import "./styles.css";
 
 type Image = {
   image: string;
@@ -20,6 +20,7 @@ export type IBookData = Omit<IBooksList, "provider"> & Image;
 const BookCard = ({ book }: { book: IBooksList }) => {
   const [randomImage, setRandomImage] = useState("");
   const navigate = useNavigate();
+  const token = getLocalStorageItem("token");
 
   useEffect(() => {
     setRandomImage(getRandomImage());
@@ -49,11 +50,7 @@ const BookCard = ({ book }: { book: IBooksList }) => {
   };
 
   return (
-    <Card
-      className="bookCard"
-      style={{ borderRadius: "10px", cursor: "pointer" }}
-      onClick={handleCardClick}
-    >
+    <Card className="bookCard" onClick={token ? handleCardClick : () => {}}>
       <CardMedia
         component="img"
         height="140"
@@ -61,18 +58,7 @@ const BookCard = ({ book }: { book: IBooksList }) => {
         alt="Book Cover"
       />
       <CardContent>
-        <Typography
-          variant="h5"
-          component="div"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            textTransform: "capitalize",
-            marginBottom: "16px",
-            alignItems: "flex-end",
-            alignContent: "flex-end",
-          }}
-        >
+        <Typography variant="h5" component="div" className="typography">
           {book.title}
           <Typography
             variant="h6"
