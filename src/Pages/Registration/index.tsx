@@ -102,6 +102,7 @@ const Registration = () => {
           onChange={handleChange}
           placeholder="Full Name"
           required
+          autoComplete="off"
         />
         {errors.fullName && <p>{errors.fullName}</p>}
         <input
@@ -111,6 +112,7 @@ const Registration = () => {
           onChange={handleChange}
           placeholder="Email"
           required
+          autoComplete="off"
         />
         {errors.email && <p>{errors.email}</p>}
         <input
@@ -120,6 +122,7 @@ const Registration = () => {
           onChange={handleChange}
           placeholder="Location"
           required
+          autoComplete="off"
         />
         {errors.location && <p>{errors.location}</p>}
         <input

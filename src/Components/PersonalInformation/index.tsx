@@ -37,6 +37,7 @@ const PersonalInformation = ({
           variant="outlined"
           fullWidth
           margin="normal"
+          autoComplete="off"
         />
         <TextField
           id="email"
@@ -57,6 +58,7 @@ const PersonalInformation = ({
           variant="outlined"
           fullWidth
           margin="normal"
+          autoComplete="off"
         />
       </div>
       <Button

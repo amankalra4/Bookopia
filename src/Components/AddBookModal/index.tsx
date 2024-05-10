@@ -34,6 +34,7 @@ const AddBookModal = ({
       genre: [""],
       operationType: "",
       image: "",
+      availability: "",
     }
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +44,8 @@ const AddBookModal = ({
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name!]: value,
+      [name!]:
+        value === "available" ? true : value === "unavailable" ? false : value,
     }));
   };
 
@@ -104,6 +106,7 @@ const AddBookModal = ({
             fullWidth
             required
             className="formMargin"
+            autoComplete="off"
           />
           <TextField
             name="condition"
@@ -126,6 +129,7 @@ const AddBookModal = ({
             fullWidth
             required
             className="formMargin"
+            autoComplete="off"
           />
           <TextField
             name="operationType"
@@ -140,6 +144,23 @@ const AddBookModal = ({
             <MenuItem value="lend">Lend</MenuItem>
             <MenuItem value="borrow">Borrow</MenuItem>
           </TextField>
+          {isBookUpdate ? (
+            <TextField
+              name="availability"
+              select
+              label="Availability"
+              value={
+                formData.availability === "true" ? "available" : "unavailable"
+              }
+              onChange={handleChange}
+              fullWidth
+              required
+              className="formMargin"
+            >
+              <MenuItem value="available">Available</MenuItem>
+              <MenuItem value="unavailable">Unavailable</MenuItem>
+            </TextField>
+          ) : null}
           <Button
             type="submit"
             variant="contained"

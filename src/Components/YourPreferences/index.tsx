@@ -17,14 +17,16 @@ const YourPreferences = ({
   handleGenreSubmit: (genres: Genres[]) => Promise<void>;
   isGenreUpdating: boolean;
 }) => {
-  const [selectedGenres, setSelectedGenres] = useState<Genres[]>(yourGenres);
+  const [selectedGenres, setSelectedGenres] = useState<Genres[]>(
+    yourGenres ? yourGenres : []
+  );
 
   const handleGenreChange = (event: any) => {
     const { name, checked } = event.target;
     if (checked) {
       setSelectedGenres([...selectedGenres, name]);
     } else {
-      setSelectedGenres(selectedGenres.filter((genre) => genre !== name));
+      setSelectedGenres(selectedGenres?.filter((genre) => genre !== name));
     }
   };
 

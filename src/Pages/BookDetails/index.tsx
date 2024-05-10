@@ -7,7 +7,7 @@ import "./styles.css";
 import { IBookData } from "../../Components/BookCard";
 import { ROUTES } from "../../utils/constants";
 import customAxios from "../../utils/axios";
-import { errorToastWrapper } from "../../utils";
+import { errorToastWrapper, getLocalStorageItem } from "../../utils";
 
 interface IDeleteResponse {
   message: string;
@@ -20,6 +20,7 @@ const BookDetails = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const token = getLocalStorageItem("token");
 
   useEffect(() => {
     const queryParams = queryString.parse(location.search);
@@ -99,12 +100,16 @@ const BookDetails = () => {
           top: "50px",
         }}
       >
-        <Button variant="contained" color="primary" onClick={handleUpdate}>
-          Update
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleDelete}>
-          Delete
-        </Button>
+        {token && (
+          <>
+            <Button variant="contained" color="primary" onClick={handleUpdate}>
+              Update
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleDelete}>
+              Delete
+            </Button>
+          </>
+        )}
       </div>
       {openBookModal && (
         <AddBookModal
